@@ -10,9 +10,11 @@
 
 library(magrittr)
 
+# sim to get mean of Y
 hist(replicate(100000, mean(exp(rnorm(100)))))
 replicate(100000, mean(exp(rnorm(100)))) %>% mean()
 
+# sim to get var of Y
 hist(replicate(100000, var(exp(rnorm(100)))))
 replicate(100000, var(exp(rnorm(100)))) %>% mean()
 
