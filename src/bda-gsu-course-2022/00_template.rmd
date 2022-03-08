@@ -118,7 +118,7 @@ You can include an existing image (e.g. scanned copy of pen and paper equations)
 or alternatively
 
 ```{r, out.width = "350px"}
-knitr::include_graphics("bayesian_workflow_illustration.pdf")
+# knitr::include_graphics("bayesian_workflow_illustration.pdf")
 ```
 
 # Equations
