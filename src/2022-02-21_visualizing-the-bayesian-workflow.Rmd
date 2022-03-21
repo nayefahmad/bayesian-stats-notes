@@ -29,6 +29,7 @@ library(bayesplot)
 library(loo)
 library(tidybayes)
 library(here)
+library(GGally)
 ```
 
 # Reading in data 
@@ -46,6 +47,50 @@ ds <-
          birthweight < 9.999)
 
 str(ds)
+summary(ds)
 head(ds)
 ```
+
+## Explanation of variables: 
+
+1. `gest` is gestational age in weeks. 40 weeks is considered normal. 
+1. `birthweight` is birth weight in 
+1. `preterm` 
+
+
+# EDA 
+
+## Log transformation 
+
+In the original post, modeling is done on the log scale. However, it's not totally clear to me that the log transformation yields a better fit. 
+
+```{r}
+ds %>% 
+  ggplot(aes(x = gest, y = birthweight)) + 
+  geom_point(alpha = .3) + 
+  geom_smooth() + 
+  geom_smooth(method = "lm", col = "red") + 
+  labs(title = "birthweight vs gestational age")
+
+
+```
+
+```{r}
+ds %>% 
+  ggplot(aes(x = log(gest), y = log(birthweight))) + 
+  geom_point(alpha = .3) + 
+  geom_smooth() + 
+  geom_smooth(method = "lm", col = "red") + 
+  labs(title = "log(birthweight) vs log(gestational age)")
+
+
+```
+
+## Interaction between gestational age and preterm 
+
+```{r}
+ggpairs(ds[,c("birthweight", "gest", "preterm")])
+```
+
+
 
