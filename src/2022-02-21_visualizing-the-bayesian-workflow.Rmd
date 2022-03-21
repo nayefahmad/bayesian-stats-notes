@@ -54,8 +54,8 @@ head(ds)
 ## Explanation of variables: 
 
 1. `gest` is gestational age in weeks. 40 weeks is considered normal. 
-1. `birthweight` is birth weight in 
-1. `preterm` 
+1. `birthweight` is birth weight in kilograms (?). 
+1. `preterm` is a binary variable identifying births before 32 weeks. 
 
 
 # EDA 
