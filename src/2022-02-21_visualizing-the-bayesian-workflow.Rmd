@@ -1,0 +1,41 @@
+---
+title: "Visualizing the bayesian workflow in R"
+author: "Nayef Ahmad"
+date: "2022-03-21" 
+output: 
+   github_document: 
+     toc: true
+     number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview 
+
+References: 
+
+- [Blog post by Monica Alexander](https://www.monicaalexander.com/posts/2020-28-02-bayes_viz/)
+
+
+# Libraries 
+
+```{r}
+library(tidyverse)
+library(rstan)
+library(brms)
+library(bayesplot)
+library(loo)
+library(tidybayes)
+library(here)
+```
+
+
+
+```{r}
+ds <- read_rds(here::here("data", "births_2017_sample.RDS"))
+head(ds)
+
+```
+
