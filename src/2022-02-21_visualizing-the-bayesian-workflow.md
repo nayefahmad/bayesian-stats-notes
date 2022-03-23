@@ -86,7 +86,7 @@ library(brms)
 
     ## Loading required package: Rcpp
 
-    ## Warning: package 'Rcpp' was built under R version 4.0.3
+    ## Warning: package 'Rcpp' was built under R version 4.0.5
 
     ## Loading 'brms' package (version 2.16.3). Useful instructions
     ## can be found by typing help('brms'). A more detailed introduction
@@ -242,8 +242,8 @@ head(ds)
 ## 3.1 Explanation of variables:
 
 1.  `gest` is gestational age in weeks. 40 weeks is considered normal.
-2.  `birthweight` is birth weight in
-3.  `preterm`
+2.  `birthweight` is birth weight in kilograms (?).
+3.  `preterm` is a binary variable identifying births before 32 weeks.
 
 # 4 EDA
 
