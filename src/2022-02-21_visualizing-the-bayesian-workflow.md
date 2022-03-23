@@ -6,11 +6,12 @@ Nayef Ahmad
 -   [1 Overview](#overview)
 -   [2 Libraries](#libraries)
 -   [3 Reading in data](#reading-in-data)
-    -   [3.1 Explanation of variables:](#explanation-of-variables)
+    -   [3.1 Explanation of variables](#explanation-of-variables)
 -   [4 EDA](#eda)
     -   [4.1 Log transformation](#log-transformation)
     -   [4.2 Interaction between gestational age and
         preterm](#interaction-between-gestational-age-and-preterm)
+-   [5 Running the models in `brms`](#running-the-models-in-brms)
 
 # 1 Overview
 
@@ -239,7 +240,7 @@ head(ds)
     ## 5    27         2     2  22.2 M        37        2.61 Y     N      
     ## 6    19         3     3  18.8 M        40        2.86 Y     N
 
-## 3.1 Explanation of variables:
+## 3.1 Explanation of variables
 
 1.  `gest` is gestational age in weeks. 40 weeks is considered normal.
 2.  `birthweight` is birth weight in kilograms (?).
@@ -284,11 +285,44 @@ ds %>%
 
 ## 4.2 Interaction between gestational age and preterm
 
+Interacting `gest` and `preterm` allows for the relationship between
+`birthweight` and `gest` to be different among levels of `preterm`.
+
+Recall that `preterm` was defined entirely based on `gest`, with no
+overlap in `gest` between `preterm = Y` and `preterm = N`. Therefore,
+including `preterm` in the model is a way of introducing a break point
+along `gest` in a principled way, using subject-matter expertise. In
+other words, this is *feature engineering*.
+
 ``` r
-ggpairs(ds[,c("birthweight", "gest", "preterm")])
+ggpairs(ds[,c("gest", "preterm", "birthweight")])
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](2022-02-21_visualizing-the-bayesian-workflow_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
+ds %>% 
+  ggplot(aes(x = log(gest), y = log(birthweight), 
+             col = preterm, 
+             group = preterm)) + 
+  geom_point(alpha = .5) + 
+  geom_smooth(method = "lm") + 
+  labs(title = "log(birthweight) vs log(gestational age)")
+```
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](2022-02-21_visualizing-the-bayesian-workflow_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+# 5 Running the models in `brms`
+
+``` r
+# mod1b <- brm(log(birthweight)~log(gest), data = ds)
+
+# pp_check(mod1b, type = "dens_overlay", nsamples = 100)
+
+# mod2b <- brm(log_weight~log_gest_c*preterm, data = ds)
+```

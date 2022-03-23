@@ -51,7 +51,7 @@ summary(ds)
 head(ds)
 ```
 
-## Explanation of variables: 
+## Explanation of variables
 
 1. `gest` is gestational age in weeks. 40 weeks is considered normal. 
 1. `birthweight` is birth weight in kilograms (?). 
@@ -88,9 +88,34 @@ ds %>%
 
 ## Interaction between gestational age and preterm 
 
+Interacting `gest` and `preterm` allows for the relationship between `birthweight` and `gest` to be different among levels of `preterm`. 
+
+Recall that `preterm` was defined entirely based on `gest`, with no overlap in `gest` between `preterm = Y` and `preterm = N`. Therefore, including `preterm` in the model is a way of introducing a break point along `gest` in a principled way, using subject-matter expertise. In other words, this is *feature engineering*. 
+
 ```{r}
-ggpairs(ds[,c("birthweight", "gest", "preterm")])
+ggpairs(ds[,c("gest", "preterm", "birthweight")])
 ```
 
 
+```{r}
+ds %>% 
+  ggplot(aes(x = log(gest), y = log(birthweight), 
+             col = preterm, 
+             group = preterm)) + 
+  geom_point(alpha = .5) + 
+  geom_smooth(method = "lm") + 
+  labs(title = "log(birthweight) vs log(gestational age)")
+```
+
+
+
+# Running the models in `brms`
+
+```{r}
+# mod1b <- brm(log(birthweight)~log(gest), data = ds)
+
+# pp_check(mod1b, type = "dens_overlay", nsamples = 100)
+
+# mod2b <- brm(log_weight~log_gest_c*preterm, data = ds)
+```
 
