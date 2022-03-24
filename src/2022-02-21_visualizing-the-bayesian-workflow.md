@@ -15,6 +15,9 @@ Nayef Ahmad
 
 # 1 Overview
 
+Here, I walk through the process of building a Bayesian regression
+model.
+
 References:
 
 -   [Blog post by Monica
