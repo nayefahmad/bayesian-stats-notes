@@ -10,7 +10,7 @@ Notes on Bayesian statistics
   - [Introduction to renv](https://rstudio.github.io/renv/articles/renv.html)
 
 
-### Notes 
+### Notes on R workflow  
 - my current workflow is to include a `library(<package>)` call in the
 script I'm working on, then in the console, call `renv::hydrate`. This seems 
 to correctly install the package in the local env. 
