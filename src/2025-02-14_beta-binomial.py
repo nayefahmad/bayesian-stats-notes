@@ -3,7 +3,9 @@ import time
 
 import arviz as az
 import matplotlib.pyplot as plt
+import numpy as np
 import pymc as pm
+import seaborn as sns
 
 
 @dataclass
@@ -20,7 +22,7 @@ p = p1
 
 if __name__ == '__main__':
     with pm.Model() as model:
-        y = [1, 1, 0]
+        y = np.random.binomial(n=1, p=.3, size=20)
         theta = pm.Beta('theta', alpha=p.alpha, beta=p.beta)
         y_obs = pm.Binomial('y_obs', n=1, p=theta, observed=y)
 
@@ -38,11 +40,27 @@ if __name__ == '__main__':
     az.plot_trace(idata)
     plt.show()
 
-    az.plot_ppc(prior_samples, group='prior')
+    az.plot_ppc(prior_samples, group='prior', var_names=['y_obs'])
     plt.show()
 
-    az.plot_ppc(posterior_samples, group='posterior')
+    az.plot_ppc(posterior_samples)
     plt.show()
+
+    prior_values = prior_samples.prior['theta'].values
+    prior_pred_values = prior_samples.prior_predictive['y_obs'].values
+    posterior_values = idata.posterior['theta'].values
+    posterior_pred_values = posterior_samples.posterior_predictive['y_obs'].values
+
+
+    # Plot outputs:
+    all_values = [
+        prior_values, prior_pred_values, posterior_values, posterior_pred_values
+    ]
+    labels = ['prior', 'prior_predictive', 'posterior', 'posterior_predictive']
+    for idx, values in enumerate(all_values):
+        sns.distplot(values)
+        plt.suptitle(labels[idx])
+        plt.show()
 
     print('done')
 
