@@ -1,11 +1,13 @@
 from dataclasses import dataclass
-import time
 
 import arviz as az
 import matplotlib.pyplot as plt
 import numpy as np
 import pymc as pm
 import seaborn as sns
+
+seed = 2025
+rng = np.random.RandomState(seed)  # instance of np.random.Generator
 
 
 @dataclass
@@ -21,16 +23,15 @@ p2 = BetaPriorParams(alpha=5, beta=1)
 p = p1
 
 if __name__ == '__main__':
+    y = rng.binomial(n=1, p=.3, size=20)
+
     with pm.Model() as model:
-        y = np.random.binomial(n=1, p=.3, size=20)
         theta = pm.Beta('theta', alpha=p.alpha, beta=p.beta)
         y_obs = pm.Binomial('y_obs', n=1, p=theta, observed=y)
 
-        start = time.time()
         idata = pm.sample(
             1000, return_inferencedata=True, progressbar=True, cores=8
         )
-        elapsed_seconds = time.time() - start
 
         prior_samples = pm.sample_prior_predictive(500, model)
         posterior_samples = pm.sample_posterior_predictive(idata, model=model)
@@ -40,12 +41,14 @@ if __name__ == '__main__':
     az.plot_trace(idata)
     plt.show()
 
-    az.plot_ppc(prior_samples, group='prior', var_names=['y_obs'])
-    plt.show()
+    # todo: how to fix these?
+    # az.plot_ppc(prior_samples, group='prior', var_names=['y_obs'])
+    # plt.show()
+    #
+    # az.plot_ppc(posterior_samples)
+    # plt.show()
 
-    az.plot_ppc(posterior_samples)
-    plt.show()
-
+    # Extracting values from the idata objects:
     prior_values = prior_samples.prior['theta'].values
     prior_pred_values = prior_samples.prior_predictive['y_obs'].values
     posterior_values = idata.posterior['theta'].values
