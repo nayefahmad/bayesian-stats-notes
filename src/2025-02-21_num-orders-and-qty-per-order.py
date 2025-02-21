@@ -14,8 +14,9 @@ import numpy as np
 import pymc as pm
 import pytensor
 
-pytensor.config.blas__ldflags = ("-LC:/Nayef/bayesian-stats-notes/.venv/Lib/"
-                                 "site-packages/scipy.libs -lopenblas")
+pytensor.config.blas__ldflags = (
+    "-LC:/Nayef/bayesian-stats-notes/.venv/Lib/" "site-packages/scipy.libs -lopenblas"
+)
 
 rng = np.random.RandomState(2020)
 
@@ -28,11 +29,11 @@ true_mu = true_avg_qty * true_num_orders  # expected total parts
 observed_total_parts = rng.poisson(true_mu)
 print("Simulated observed total parts:", observed_total_parts)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     with pm.Model() as simple_model:
-        avg_qty_per_order = pm.Exponential('avg_qty_per_order', lam=1.8)
-        num_orders = pm.Poisson('num_orders', mu=10)
-        mu = pm.Deterministic('mu', num_orders * avg_qty_per_order)
+        avg_qty_per_order = pm.Exponential("avg_qty_per_order", lam=1.8)
+        num_orders = pm.Poisson("num_orders", mu=10)
+        mu = pm.Deterministic("mu", num_orders * avg_qty_per_order)
         total_parts = pm.Poisson("total_parts", mu=mu, observed=observed_total_parts)
 
         # Sample from the posterior
