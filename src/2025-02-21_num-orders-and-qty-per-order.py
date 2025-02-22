@@ -10,7 +10,7 @@ likelihood that is parametrized such that mu = num_orders * average_qty_per_orde
 
 """
 import arviz as az
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import numpy as np
 import pymc as pm
 import pytensor
@@ -32,14 +32,12 @@ if __name__ == "__main__":
     # Simulate observed total parts (a single observation)
     observed_total_parts = rng.poisson(true_mu)
     print("Simulated observed total parts:", observed_total_parts)
-    
+
     with pm.Model() as simple_model:
         avg_qty_per_order = pm.Exponential("avg_qty_per_order", lam=1.8)
         num_orders = pm.Poisson("num_orders", mu=10)
         mu = pm.Deterministic("mu", num_orders * avg_qty_per_order)
-        total_parts = pm.Poisson(
-            "total_parts", mu=mu, observed=observed_total_parts
-        )
+        total_parts = pm.Poisson("total_parts", mu=mu, observed=observed_total_parts)
 
         # Sample from the posterior
         trace = pm.sample(1000, tune=1000, return_inferencedata=True, progressbar=True)
@@ -49,24 +47,22 @@ if __name__ == "__main__":
     print(az.summary(trace))
 
     az.plot_trace(trace)
-    
-    prior_preds = prior_samples.prior_predictive['total_parts'].values
-    posterior_preds = (
-        posterior_samples.posterior_predictive['total_parts'].values.flatten()
-    ) 
-    
+
+    prior_preds = prior_samples.prior_predictive["total_parts"].values
+    posterior_preds = posterior_samples.posterior_predictive[
+        "total_parts"
+    ].values.flatten()
+
     sns.distplot(prior_preds.flatten())
-    plt.suptitle('prior predictive')
+    plt.suptitle("prior predictive")
     plt.show()
 
     sns.distplot(posterior_preds)
-    plt.suptitle('posterior predictive')
+    plt.suptitle("posterior predictive")
     plt.show()
 
     point_estimate = np.mean(posterior_preds)
-    pred_interval = np.quantile(posterior_preds, [.05, .95])
+    pred_interval = np.quantile(posterior_preds, [0.05, 0.95])
 
-    print(f'Point estimate for total parts: {point_estimate}')
-    print(f'Prediction interval: {pred_interval[0]}-{pred_interval[1]}')
-    
-
+    print(f"Point estimate for total parts: {point_estimate}")
+    print(f"Prediction interval: {pred_interval[0]}-{pred_interval[1]}")
