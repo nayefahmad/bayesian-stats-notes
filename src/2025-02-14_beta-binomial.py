@@ -20,7 +20,7 @@ p1 = BetaPriorParams()
 p2 = BetaPriorParams(alpha=5, beta=1)
 
 # Select which parameters to use:
-p = p1
+p = p2
 
 if __name__ == '__main__':
     y = rng.binomial(n=1, p=.3, size=20)
