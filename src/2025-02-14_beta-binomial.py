@@ -22,21 +22,19 @@ p2 = BetaPriorParams(alpha=5, beta=1)
 # Select which parameters to use:
 p = p2
 
-if __name__ == '__main__':
-    y = rng.binomial(n=1, p=.3, size=20)
+if __name__ == "__main__":
+    y = rng.binomial(n=1, p=0.3, size=20)
 
     with pm.Model() as model:
-        theta = pm.Beta('theta', alpha=p.alpha, beta=p.beta)
-        y_obs = pm.Binomial('y_obs', n=1, p=theta, observed=y)
+        theta = pm.Beta("theta", alpha=p.alpha, beta=p.beta)
+        y_obs = pm.Binomial("y_obs", n=1, p=theta, observed=y)
 
-        idata = pm.sample(
-            1000, return_inferencedata=True, progressbar=True, cores=8
-        )
+        idata = pm.sample(1000, return_inferencedata=True, progressbar=True, cores=8)
 
         prior_samples = pm.sample_prior_predictive(500, model)
         posterior_samples = pm.sample_posterior_predictive(idata, model=model)
 
-    az.summary(idata, kind='stats')
+    az.summary(idata, kind="stats")
 
     az.plot_trace(idata)
     plt.show()
@@ -49,21 +47,22 @@ if __name__ == '__main__':
     # plt.show()
 
     # Extracting values from the idata objects:
-    prior_values = prior_samples.prior['theta'].values
-    prior_pred_values = prior_samples.prior_predictive['y_obs'].values
-    posterior_values = idata.posterior['theta'].values
-    posterior_pred_values = posterior_samples.posterior_predictive['y_obs'].values
-
+    prior_values = prior_samples.prior["theta"].values
+    prior_pred_values = prior_samples.prior_predictive["y_obs"].values
+    posterior_values = idata.posterior["theta"].values
+    posterior_pred_values = posterior_samples.posterior_predictive["y_obs"].values
 
     # Plot outputs:
     all_values = [
-        prior_values, prior_pred_values, posterior_values, posterior_pred_values
+        prior_values,
+        prior_pred_values,
+        posterior_values,
+        posterior_pred_values,
     ]
-    labels = ['prior', 'prior_predictive', 'posterior', 'posterior_predictive']
+    labels = ["prior", "prior_predictive", "posterior", "posterior_predictive"]
     for idx, values in enumerate(all_values):
         sns.distplot(values)
         plt.suptitle(labels[idx])
         plt.show()
 
-    print('done')
-
+    print("done")
