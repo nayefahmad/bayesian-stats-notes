@@ -6,8 +6,8 @@ import numpy as np
 import pymc as pm
 import seaborn as sns
 
-seed = 2025
-rng = np.random.RandomState(seed)  # instance of np.random.Generator
+SEED = 2025
+rng = np.random.RandomState(SEED)  # instance of np.random.Generator
 
 
 @dataclass
