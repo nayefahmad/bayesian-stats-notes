@@ -80,7 +80,7 @@ class LinearModel(ModelBuilder):
             b = pm.Normal("b", mu=b_mu_prior, sigma=b_sigma_prior)
             eps = pm.HalfNormal("eps", eps_prior)
 
-            obs = pm.Normal(   # noqa:
+            obs = pm.Normal(  # noqa:
                 "y", mu=a + b * x_data, sigma=eps, shape=x_data.shape, observed=y_data
             )
 
