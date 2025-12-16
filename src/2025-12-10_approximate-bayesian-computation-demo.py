@@ -1,5 +1,5 @@
 """
-Simple example of approx Bayesian computation (ABC).
+Simple example of approximate Bayesian computation (ABC).
 
 References:
     - Martin et al, "Bayesian modeling and computation in python", p237
